@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movieStoreDash", "movieStoreDash\movieStoreDash.csproj", "{B8BC9880-6647-4816-9CCD-E123D3420C8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movieStoreDash.Data", "movieStoreDash.Data\movieStoreDash.Data.csproj", "{38F6F849-81CA-49D4-8C9C-9977F0EDD126}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8BC9880-6647-4816-9CCD-E123D3420C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8BC9880-6647-4816-9CCD-E123D3420C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8BC9880-6647-4816-9CCD-E123D3420C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8BC9880-6647-4816-9CCD-E123D3420C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38F6F849-81CA-49D4-8C9C-9977F0EDD126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38F6F849-81CA-49D4-8C9C-9977F0EDD126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38F6F849-81CA-49D4-8C9C-9977F0EDD126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38F6F849-81CA-49D4-8C9C-9977F0EDD126}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {57D13791-B27A-478F-83A6-FF46B9F9646B}
+	EndGlobalSection
+EndGlobal

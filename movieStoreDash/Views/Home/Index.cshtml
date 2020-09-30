@@ -1,0 +1,86 @@
+﻿@model movieStoreDash.Models.HomeIndexDTO
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <ul class="list-group">
+                @foreach (var film in Model.films)
+                {
+                    <li class="list-group-item" onclick="displayActors('@film.FilmId')">@film.Title</li>
+                }
+            </ul>
+        </div>
+        <div class="col-8">
+            <nav class="nav nav-pills flex-column flex-sm-row">
+                <a id="actorTabPill" class="flex-sm-fill text-sm-center nav-link active" href="#" onclick="actorTabClick()">Actors</a>
+                <a id="moreInfoPill" class="flex-sm-fill text-sm-center nav-link" href="#" onclick="moreInfoTabClick()">more info</a>
+                <a id="yetMoreInfoPill" class="flex-sm-fill text-sm-center nav-link" href="#" onclick="yetMoreInfoTabClick()">yet more info</a>
+                <a id="disabledPill" class="flex-sm-fill text-sm-center nav-link disabled" href="#">Disabled</a>
+            </nav>
+
+            <form>
+                <div id="actorTab" class="container">
+                    @*action="/home/UpdateActorInfo" method="post">*@
+                    <input type="hidden" id="actorId" name="actorId" value="" />
+                    <div class="row">
+                        <ul id="filmActors" class="list-group">
+                        </ul>
+                    </div>
+                    <div id="actorInfo" class="d-none row">
+
+                        <div class="col-6">
+                            @*<p id="bio">bio</p>*@
+                            <textarea class="form-control" id="bio" style="height:100%" name="bio"></textarea>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                @*<img style="width:100%" src="~/image/ospan-ali-Dh-Ip3YKAEM-unsplash.jpg" />*@
+                                <img id="actorImg" style="width:100%" src="~/image/mathilde-langevin-e6UgBVsXecA-unsplash.jpg" />
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input id="firstName" type="text" name="firstName" value="" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input id="lastName" type="text" name="lastName" value="" />
+                            </div>
+                            @*<input type="submit" name="name" value="submit" />*@
+                            @*<button type="submit" class="btn btn-primary">Submit</button>*@
+                            <button type="button" class="btn btn-dark" onclick="UpdateActorInfo()">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="moreInfo" class="d-none">
+                    <h1>more info tab</h1>
+                </div>
+                <div id="yetMoreInfo" class="d-none">
+                    <h1>yet more info tab</h1>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px; z-index:10000">
+    <div class="toast" style="position: absolute; top: 0; right: 0;">
+        <div class="toast-header">
+            <img src="..." class="rounded mr-2" alt="...">
+            <strong class="mr-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
