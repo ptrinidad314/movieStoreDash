@@ -45,11 +45,11 @@ namespace movieStoreDash.Controllers
         }
 
         [HttpPost]
-        public void UpdateActorInfo(string bio, string firstName, string lastName, string actorId) 
+        public void UpdateActorInfo(string bio, string firstName, string lastName, string actorId, string socialMediaURL) 
         {
             int iActorId = int.Parse(actorId);
 
-            _movieStoreDashRepository.UpdateActorInfo(iActorId, bio, firstName, lastName);          
+            _movieStoreDashRepository.UpdateActorInfo(iActorId, bio, firstName, lastName, socialMediaURL);          
         }
 
 

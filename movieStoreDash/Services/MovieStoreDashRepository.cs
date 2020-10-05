@@ -86,6 +86,9 @@ namespace movieStoreDash.Services
              
             }
 
+            if (response.ResponseUri.Scheme == "http")
+                return true;
+
  
             return false;
         }
@@ -118,7 +121,7 @@ namespace movieStoreDash.Services
             }
         }
 
-        public void UpdateActorInfo(int actorId, string bio, string firstName, string lastName)
+        public void UpdateActorInfo(int actorId, string bio, string firstName, string lastName, string socialMediaURL)
         {
             using (var db = new sakilaContext()) 
             {
@@ -129,9 +132,26 @@ namespace movieStoreDash.Services
                     actorToUpdate.FirstName = firstName;
                     actorToUpdate.LastName = lastName;
                     actorToUpdate.LastUpdate = DateTimeOffset.Now;
-
-                    db.SaveChanges();
+                    
                 }
+
+                var socialMedia = db.Socialmedia.Where(s => s.ActorId == actorId).FirstOrDefault();
+
+                if (socialMedia != null)
+                {
+                    socialMedia.Url = socialMediaURL;
+                }
+                else if(socialMediaURL != string.Empty)
+                {
+                    Socialmedia actorSocialMedia = new Socialmedia();
+                    actorSocialMedia.ActorId = (short)actorId;
+                    actorSocialMedia.Url = socialMediaURL;
+
+                    db.Socialmedia.Add(actorSocialMedia);
+                }
+
+                db.SaveChanges();
+
             }
         }
     }

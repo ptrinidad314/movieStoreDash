@@ -6,7 +6,8 @@
 
 
 $(document).ready(function () {
-   
+
+
 
 });
 
@@ -77,6 +78,17 @@ function displayActorInfo(actorId) {
 
         }
 
+
+        /*
+         $.get(link, function (response){
+            var html = response;
+            var html_src = 'data:text/html;charset=utf-8,' + html;
+            $("#iframeId").attr("src" , html_src);
+            });
+         
+         
+         */
+
         /*
         else {
             //alert('do not open');
@@ -98,7 +110,7 @@ function displayActorInfo(actorId) {
         //var theHtml = iframe.contentWindow.document.body.innerHTML;
 
         
-        console.log(theHtml);
+        //console.log(theHtml);
 
     });
 }
@@ -106,12 +118,14 @@ function displayActorInfo(actorId) {
 //UpdateActorInfo(string bio, string firstName, string lastName, string actorId) 
 function UpdateActorInfo() {
     var bio = $('#bio').html();
-    var firstName = $('#firstName').val();
-    var lastName = $('#lastName').val();
-    var actorId = $('#actorId').val();
+    var firstName = $('#firstName').val().trim();
+    var lastName = $('#lastName').val().trim();
+    var actorId = $('#actorId').val().trim();
 
-    $.post('home/UpdateActorInfo', { bio: bio, firstName: firstName, lastName: lastName, actorId: actorId }, function (result) {
-        console.log('updated')
+    var socialMediaURL = $('#socialMediaURL').val().trim();
+
+    $.post('home/UpdateActorInfo', { bio: bio, firstName: firstName, lastName: lastName, actorId: actorId, socialMediaURL: socialMediaURL }, function (result) {
+        alert('updated')
     });
 }
 
