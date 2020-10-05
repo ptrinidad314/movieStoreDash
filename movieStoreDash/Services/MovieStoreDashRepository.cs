@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using RestSharp;
+
 namespace movieStoreDash.Services
 {
     public class MovieStoreDashRepository : IMovieStoreDashRepository
@@ -33,8 +35,59 @@ namespace movieStoreDash.Services
                 aDTO.firstname = actor.FirstName;
                 aDTO.lastname = actor.LastName;
 
+                
+
+                var actorSocialMedia = db.Socialmedia.Where(a => a.ActorId == actorId).FirstOrDefault();
+                if (actorSocialMedia != null)
+                {
+                    aDTO.socialMediaURL = actorSocialMedia.Url;
+
+                    aDTO.autoOpenURL = CheckSocialMediaResponseHeaders(actorSocialMedia.Url);
+
+                }
+                else
+                    aDTO.socialMediaURL = string.Empty;
+               
+
                 return aDTO;
             }
+        }
+
+        private bool CheckSocialMediaResponseHeaders(string urlToCheck) 
+        {
+            var client = new RestClient(urlToCheck);//"https://www.instagram.com/p/CFujbiBBSeh/");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.GET);
+           // request.AddHeader("Cookie", "ig_did=2C870A38-D1B7-440D-B865-6A37C6750668; csrftoken=5zViP50aHkQniVUg3TU3OeVn9EYTSj12; mid=X3o4oQAEAAF6SbAP_3PYnu7tRUO2; urlgen=\"{\\\"68.230.105.87\\\": 22773}:1kPBAH:3_xc_JM0e-sQnf-FuiIWtQ4y2-I\"");
+            IRestResponse response = client.Execute(request);
+            //Console.WriteLine(response.Content);
+
+            var xFrameOptions = response.Headers.ToList()
+                .Find(x => x.Name == "X-Frame-Options");
+
+            if (xFrameOptions != null) 
+            {
+                string headerVal = xFrameOptions.Value.ToString().ToUpper();
+
+                if (headerVal == "SAMEORIGIN" || headerVal == "DENY")
+                    return true;
+            }
+
+
+            var contentSecurityPolicy = response.Headers.ToList()
+                .Find(x => x.Name == "Content-Security-Policy");
+
+            if (contentSecurityPolicy != null) 
+            {
+                string headerVal = contentSecurityPolicy.Value.ToString().ToUpper();
+
+                if (headerVal.Contains("FRAME-ANCESTORS 'SELF'"))
+                    return true;
+             
+            }
+
+ 
+            return false;
         }
 
         public List<Actor> GetFilmActors(int filmId)
@@ -55,7 +108,7 @@ namespace movieStoreDash.Services
         {
             using (var db = new sakilaContext()) 
             {
-                var films = db.Film.ToList().GetRange(0, 20);
+                var films = db.Film.ToList(); //.GetRange(0, 20);
 
                 HomeIndexDTO homeIndexDTO = new HomeIndexDTO();
 

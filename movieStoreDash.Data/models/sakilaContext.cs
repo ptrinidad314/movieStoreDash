@@ -37,6 +37,7 @@ namespace movieStoreDash.Data.models
         public virtual DbSet<Rental> Rental { get; set; }
         public virtual DbSet<SalesByFilmCategory> SalesByFilmCategory { get; set; }
         public virtual DbSet<SalesByStore> SalesByStore { get; set; }
+        public virtual DbSet<Socialmedia> Socialmedia { get; set; }
         public virtual DbSet<Staff> Staff { get; set; }
         public virtual DbSet<StaffList> StaffList { get; set; }
         public virtual DbSet<Store> Store { get; set; }
@@ -877,6 +878,19 @@ namespace movieStoreDash.Data.models
                 entity.Property(e => e.TotalSales)
                     .HasColumnName("total_sales")
                     .HasColumnType("decimal(27,2)");
+            });
+
+            modelBuilder.Entity<Socialmedia>(entity =>
+            {
+                entity.ToTable("socialmedia");
+
+                entity.Property(e => e.SocialmediaId).HasColumnName("socialmedia_id");
+
+                entity.Property(e => e.ActorId).HasColumnName("actor_id");
+
+                entity.Property(e => e.Url)
+                    .HasColumnName("url")
+                    .HasColumnType("longtext");
             });
 
             modelBuilder.Entity<Staff>(entity =>

@@ -12,5 +12,7 @@ namespace movieStoreDash.Models
         public string imageUrl { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
+        public string socialMediaURL { get; set; }
+        public bool autoOpenURL { get; set; }
     }
 }

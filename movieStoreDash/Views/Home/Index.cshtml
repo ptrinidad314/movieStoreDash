@@ -5,9 +5,9 @@
 }
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-4">
+@*<div class="container">*@
+    <div class="row" style="width:100%">
+        <div class="col-2" style="max-height:100vh;overflow-y:auto;width:100%">
             <ul class="list-group">
                 @foreach (var film in Model.films)
                 {
@@ -15,7 +15,7 @@
                 }
             </ul>
         </div>
-        <div class="col-8">
+        <div class="col-10" style="width:100%">
             <nav class="nav nav-pills flex-column flex-sm-row">
                 <a id="actorTabPill" class="flex-sm-fill text-sm-center nav-link active" href="#" onclick="actorTabClick()">Actors</a>
                 <a id="moreInfoPill" class="flex-sm-fill text-sm-center nav-link" href="#" onclick="moreInfoTabClick()">more info</a>
@@ -24,34 +24,51 @@
             </nav>
 
             <form>
-                <div id="actorTab" class="container">
+                <div id="actorTab">
                     @*action="/home/UpdateActorInfo" method="post">*@
                     <input type="hidden" id="actorId" name="actorId" value="" />
-                    <div class="row">
-                        <ul id="filmActors" class="list-group">
-                        </ul>
+                    <input type="hidden" id="actorSocialMediaURL" name="actorSocialMediaURL" value="" />
+
+                    <div class="row" style="width:100%">
+                        <div class="col-12" style="max-height:250px;overflow-y:auto">
+                            <ul id="filmActors" class="list-group">
+                            </ul>
+                        </div>
                     </div>
                     <div id="actorInfo" class="d-none row">
 
-                        <div class="col-6">
+                        <div class="col-8">
                             @*<p id="bio">bio</p>*@
-                            <textarea class="form-control" id="bio" style="height:100%" name="bio"></textarea>
+                            @*<textarea class="form-control" id="bio" style="height:100%" name="bio"></textarea>*@
+                            <iframe id="mediaIF" src="" style="height:100%; width:100%"></iframe>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div>
                                 @*<img style="width:100%" src="~/image/ospan-ali-Dh-Ip3YKAEM-unsplash.jpg" />*@
                                 <img id="actorImg" style="width:100%" src="~/image/mathilde-langevin-e6UgBVsXecA-unsplash.jpg" />
                             </div>
                             <div class="form-group">
                                 <label for="firstName">First Name</label>
-                                <input id="firstName" type="text" name="firstName" value="" />
+                                <input id="firstName" class="form-control" type="text" name="firstName" value="" />
                             </div>
                             <div class="form-group">
                                 <label for="lastName">Last Name</label>
-                                <input id="lastName" type="text" name="lastName" value="" />
+                                <input id="lastName" class="form-control" type="text" name="lastName" value="" />
                             </div>
-                            @*<input type="submit" name="name" value="submit" />*@
-                            @*<button type="submit" class="btn btn-primary">Submit</button>*@
+                           
+
+                            <div class="form-group">
+                                <label for="socialMediaURL">Social Media URL</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" id="socialMediaURL" name="socialMediaURL" class="form-control" value="https://www.instagram.com/p/CFujbiBBSeh/" placeholder="Recipient's social media" aria-label="Recipient's social media" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="displaySocialMedia()"><i class="fas fa-window-restore"></i></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" onclick="displayTest()">TEST</button>
+
                             <button type="button" class="btn btn-dark" onclick="UpdateActorInfo()">Update</button>
                         </div>
                     </div>
@@ -66,7 +83,7 @@
         </div>
     </div>
 
-</div>
+@*</div>*@
 
 
 <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px; z-index:10000">

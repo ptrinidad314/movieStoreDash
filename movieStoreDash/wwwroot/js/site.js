@@ -3,6 +3,30 @@
 
 // Write your JavaScript code.
 
+
+
+$(document).ready(function () {
+   
+
+});
+
+
+
+
+
+
+function displaySocialMedia() {
+
+    var url = $('#actorSocialMediaURL').val();
+
+    if (url === '') {
+        alert('error, no social media url');
+    } else {
+        window.open(url, "MsgWindow", "width=700,height=700");
+    }
+
+}
+
 function displayActors(filmId) {
     //alert(filmId);
 
@@ -24,17 +48,58 @@ function displayActors(filmId) {
 
 function displayActorInfo(actorId) {
     $.post('home/getActorInfo', { actorId: actorId }, function (result) {
-        console.log(result);
+        //console.log(result);
 
         $('#actorInfo').removeClass('d-none'); //.show();
         $('#actorInfo').addClass('d-flex');
 
         $('#actorId').val(result.actorID);
-        $('#bio').html(result.bio);
-        //$('#name').html(result.name);
+        //$('#bio').html(result.bio);
+       
         $('#firstName').val(result.firstname);
         $('#lastName').val(result.lastname);
-        $('#actorImg').attr('src',result.imageUrl);
+        $('#actorImg').attr('src', result.imageUrl);
+
+        //socialMediaURL
+        $('#socialMediaURL').val(result.socialMediaURL);
+
+        //$('#mediaIF').attr('src', result.socialMediaURL);
+
+        $('#actorSocialMediaURL').val(result.socialMediaURL);
+
+        //alert(result.autoOpenURL);
+        $('#mediaIF').attr('src', result.socialMediaURL);
+
+        if (result.autoOpenURL) {
+            //alert('open');
+            //$('#mediaIF').attr('src', '');
+            displaySocialMedia();
+
+        }
+
+        /*
+        else {
+            //alert('do not open');
+            $('#mediaIF').attr('src', result.socialMediaURL);
+        }*/
+
+
+
+        //var testURL = 'https://www.phoenixnewtimes.com/music/september-2020-new-songs-arizona-phoenix-musicians-11497873';
+        //var testURL = 'https://www.instagram.com/p/CFujbiBBSeh/';
+        //$('#mediaIF').attr('src', testURL);
+     
+
+        //console.log('the iframe test');
+        //console.log($('#mediaIF'));
+
+        //var iframe = document.getElementById('iframe');
+        //console.log(iframe);
+        //var theHtml = iframe.contentWindow.document.body.innerHTML;
+
+        
+        console.log(theHtml);
+
     });
 }
 
