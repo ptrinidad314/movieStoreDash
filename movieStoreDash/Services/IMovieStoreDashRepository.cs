@@ -15,5 +15,7 @@ namespace movieStoreDash.Services
         List<Actor> GetFilmActors(int filmId);
         ActorDTO GetActorInfo(int actorId);
         void UpdateActorInfo(int actorId, string bio, string firstName, string lastName, string socialMediaURL);
+
+        void RunTest();
     }
 }

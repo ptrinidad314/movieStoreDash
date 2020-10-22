@@ -53,6 +53,15 @@ namespace movieStoreDash.Controllers
         }
 
 
+        public void RunTest(int testNum) 
+        {
+            _movieStoreDashRepository.RunTest();
+        }
+
+
+
+
+
         public IActionResult Privacy()
         {
             return View();

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using RestSharp;
+using MySql.Data.MySqlClient;
 
 namespace movieStoreDash.Services
 {
@@ -154,5 +155,114 @@ namespace movieStoreDash.Services
 
             }
         }
+
+        public void RunTest()
+        {
+            bool testRes;
+
+            string connStr = "server=localhost;port=3306;database=sakila;uid=root;password=Abc123!;";
+
+            string cmdPart1 = "UPDATE table1 SET value = (CASE id ";
+
+            string cmdPart2 = string.Empty;
+
+            string cmdPart3 = " END) WHERE id IN(";  //1, 2, 3, 4, 5);
+
+            string cmdPart4 = string.Empty;
+
+            string cmdPart5 = ");";
+
+            var list = new List<KeyValuePair<int, string>>();
+            list.Add(new KeyValuePair<int, string>(1, "John"));
+            list.Add(new KeyValuePair<int, string>(2, "Mike"));
+            list.Add(new KeyValuePair<int, string>(3, "Scottie"));
+            list.Add(new KeyValuePair<int, string>(4, "Horace"));
+            list.Add(new KeyValuePair<int, string>(5, "Bill"));
+
+            using (MySqlConnection myConnection = new MySqlConnection(connStr)) 
+            {
+                //string myUpdateQuery =
+                foreach (var kvp in list) 
+                {
+                    cmdPart2 = cmdPart2 + "WHEN " + kvp.Key.ToString() + " THEN '" + kvp.Value + "' ";
+
+                    cmdPart4 = cmdPart4 + kvp.Key.ToString() + ",";
+                }
+
+                //string founderMinus1 = founder.Remove(founder.Length - 1, 1);
+                cmdPart4 = cmdPart4.Remove(cmdPart4.Length - 1, 1);
+
+                string myUpdateQuery = cmdPart1 + cmdPart2 + cmdPart3 + cmdPart4 + cmdPart5;
+
+                MySqlCommand mySqlCommand = new MySqlCommand(myUpdateQuery);
+                mySqlCommand.Connection = myConnection;
+                myConnection.Open();
+
+                var test = mySqlCommand.ExecuteNonQuery();
+
+                if (test > 0)
+                {
+                    testRes = true;
+                }
+                else 
+                {
+                    testRes = false;
+                }
+
+            }
+
+
+
+        }
+
+        /*
+          var list = new List<KeyValuePair<string, int>>();
+        list.Add(new KeyValuePair<string, int>("Cat", 1));
+        list.Add(new KeyValuePair<string, int>("Dog", 2));
+        list.Add(new KeyValuePair<string, int>("Rabbit", 
+         
+         */
+
+        /*
+         UPDATE table1 
+            SET value = 
+              (CASE id WHEN 1 THEN 'Karl'
+                       WHEN 2 THEN 'Tom'
+                       WHEN 3 THEN 'Mary'
+                       WHEN 4 THEN 'Yellow'
+                       WHEN 5 THEN 'Wonton'
+               END)
+            WHERE id IN (1,2,3,4,5);
+         */
+
+        /*
+         public void InsertRow(string myConnectionString)
+          {
+          // If the connection string is null, use a default.
+          if(myConnectionString == "")
+          {
+          myConnectionString = "Database=Test;Data Source=localhost;User Id=username;Password=pass";
+          }
+          MySqlConnection myConnection = new MySqlConnection(myConnectionString);
+          string myInsertQuery = "INSERT INTO Orders (id, customerId, amount) Values(1001, 23, 30.66)";
+          MySqlCommand myCommand = new MySqlCommand(myInsertQuery);
+          myCommand.Connection = myConnection;
+          myConnection.Open();
+          myCommand.ExecuteNonQuery();
+          myCommand.Connection.Close();
+          }
+         
+         */
+
+        /*
+           update user
+             set ext_flag = 'Y', admin_role = 'admin', ext_id = 
+             case 
+             when user_id = 2 then 345
+             when user_id = 4 then 456
+             when user_id = 5 then 789
+             end
+             **WHERE user_id  in (2,4,5)**
+          */
     }
 }

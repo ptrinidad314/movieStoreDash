@@ -1,5 +1,48 @@
-﻿.actorInfo {
-    display:none;
+﻿
+
+@media (max-width: 576px) {
+    .leftSideNav {
+        max-height: 20vh;
+        overflow-y: auto;
+        width: 100%
+    }
+
+    .filmActorList {
+        max-height:20vh;
+        overflow-y:auto;
+    }
+
+    .mediaIF {
+        height: 50vh;
+        width: 100%;
+    }
+}
+
+@media (min-width: 577px) {
+    .leftSideNav {
+        max-height: 100vh;
+        overflow-y: auto;
+        width: 100%
+    }
+
+    .filmActorList {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .mediaIF {
+        height:100%; 
+        width:100%;
+    }
+
+}
+
+
+
+
+
+.actorInfo {
+    display: none;
 }
 
 
