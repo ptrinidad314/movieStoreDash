@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using RestSharp;
 using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace movieStoreDash.Services
 {
@@ -156,64 +157,208 @@ namespace movieStoreDash.Services
             }
         }
 
-        public void RunTest()
+        public async Task<int> RunTest() 
         {
-            bool testRes;
-
-            string connStr = "server=localhost;port=3306;database=sakila;uid=root;password=Abc123!;";
-
-            string cmdPart1 = "UPDATE table1 SET value = (CASE id ";
-
-            string cmdPart2 = string.Empty;
-
-            string cmdPart3 = " END) WHERE id IN(";  //1, 2, 3, 4, 5);
-
-            string cmdPart4 = string.Empty;
-
-            string cmdPart5 = ");";
-
-            var list = new List<KeyValuePair<int, string>>();
-            list.Add(new KeyValuePair<int, string>(1, "John"));
-            list.Add(new KeyValuePair<int, string>(2, "Mike"));
-            list.Add(new KeyValuePair<int, string>(3, "Scottie"));
-            list.Add(new KeyValuePair<int, string>(4, "Horace"));
-            list.Add(new KeyValuePair<int, string>(5, "Bill"));
-
-            using (MySqlConnection myConnection = new MySqlConnection(connStr)) 
+            try
             {
-                //string myUpdateQuery =
-                foreach (var kvp in list) 
-                {
-                    cmdPart2 = cmdPart2 + "WHEN " + kvp.Key.ToString() + " THEN '" + kvp.Value + "' ";
+                string connStr = "server=localhost;port=3306;database=sakila;uid=root;password=Abc123!;";
+                string spName = "spUpdateStaff";
+                int updateCnt = 0;
 
-                    cmdPart4 = cmdPart4 + kvp.Key.ToString() + ",";
+                using (MySqlConnection myConnection = new MySqlConnection(connStr)) 
+                {
+                    myConnection.Open();
+
+                    MySqlTransaction myTransaction = await myConnection.BeginTransactionAsync();
+
+                    try
+                    {
+                        using (MySqlCommand myCommand = new MySqlCommand(spName, myConnection, myTransaction)) 
+                        {
+                            myCommand.CommandType = CommandType.StoredProcedure;
+                            myCommand.Parameters.AddWithValue("@staff_id_in",3);
+                            myCommand.Parameters.AddWithValue("@first_name", "Bradley3");
+                            myCommand.Parameters.AddWithValue("@last_name", "Newell");
+                            myCommand.Parameters.AddWithValue("@address_id", 1);
+                            myCommand.Parameters.AddWithValue("@picture", null);
+                            myCommand.Parameters.AddWithValue("@email", "bradleyN@gmail.com");
+                            myCommand.Parameters.AddWithValue("@store_id", 1);
+                            myCommand.Parameters.AddWithValue("@active", 1);
+                            myCommand.Parameters.AddWithValue("@username", "brad");
+                            myCommand.Parameters.AddWithValue("@password", "PASSWORD");
+                            myCommand.Parameters.AddWithValue("@last_update", DateTime.Now);
+                      
+                            updateCnt = await myCommand.ExecuteNonQueryAsync();
+                         
+                            await myTransaction.CommitAsync();
+                        }
+                    }
+                    catch (Exception ex) 
+                    {
+                        myTransaction.RollbackAsync();
+
+                        var test = false;
+                        return 0;
+                    }
                 }
 
-                //string founderMinus1 = founder.Remove(founder.Length - 1, 1);
-                cmdPart4 = cmdPart4.Remove(cmdPart4.Length - 1, 1);
-
-                string myUpdateQuery = cmdPart1 + cmdPart2 + cmdPart3 + cmdPart4 + cmdPart5;
-
-                MySqlCommand mySqlCommand = new MySqlCommand(myUpdateQuery);
-                mySqlCommand.Connection = myConnection;
-                myConnection.Open();
-
-                var test = mySqlCommand.ExecuteNonQuery();
-
-                if (test > 0)
-                {
-                    testRes = true;
-                }
-                else 
-                {
-                    testRes = false;
-                }
+                return updateCnt;
 
             }
+            catch (Exception ex) 
+            {
+                var test = false;
+                return 0;
+            }
+        }
+
+        /*
+        CREATE DEFINER=`root`@`localhost` PROCEDURE `spUpdateStaff`(
+	            IN staff_id_in tinyint,
+                IN first_name varchar(45),
+                IN last_name varchar(45),
+                IN address_id smallint,
+                IN picture blob,
+                in email varchar(50),
+                in store_id tinyint,
+                in active tinyint,
+                in username varchar(16),
+                in password varchar(40),
+                in last_update timestamp
+            )
+            BEGIN
+	
+                update staff
+                set 
+		            first_name = first_name,
+		            last_name = last_name,
+                    address_id = address_id,
+                    picture = picture,
+                    email = email,
+                    store_id = store_id,
+                    active = active,
+                    username = username,
+                    password = password,
+                    last_update = last_update
+	            where staff_id = staff_id_in;
+    
+    
+            END 
+
+         */
 
 
+        public void RunTest_OLD() 
+        {
+
+            try
+            {
+
+                string connStr = "server=localhost;port=3306;database=sakila;uid=root;password=Abc123!;";
+
+                string spName = "spTranTest";
+
+                using (MySqlConnection myConnection = new MySqlConnection(connStr))
+                {
+                    myConnection.Open();
+
+                    MySqlTransaction myTransaction = myConnection.BeginTransaction();
+
+                    try
+                    {
+                        using (MySqlCommand myCommand = new MySqlCommand(spName, myConnection, myTransaction))
+                        {
+                            if (myCommand.ExecuteNonQuery() > 0)
+                            {
+                                var test = true;
+
+                                //throw new ArgumentNullException();
+
+                                myTransaction.Commit();
+                            }
+                            else
+                            {
+                                var test2 = false;
+                            }
+
+                            myTransaction.Commit();
+                        }
+                    }
+                    catch (Exception ex) 
+                    {
+                        myTransaction.Rollback();
+
+                        var test3 = false;
+                    }
+
+                }
+            }
+            catch (Exception ex) 
+            {                
+
+                var test3 = false;
+            }
 
         }
+
+        //public void RunTest()
+        //{
+        //    bool testRes;
+
+        //    string connStr = "server=localhost;port=3306;database=sakila;uid=root;password=Abc123!;";
+
+        //    string cmdPart1 = "UPDATE table1 SET value = (CASE id ";
+
+        //    string cmdPart2 = string.Empty;
+
+        //    string cmdPart3 = " END) WHERE id IN(";  //1, 2, 3, 4, 5);
+
+        //    string cmdPart4 = string.Empty;
+
+        //    string cmdPart5 = ");";
+
+        //    var list = new List<KeyValuePair<int, string>>();
+        //    list.Add(new KeyValuePair<int, string>(1, "John"));
+        //    list.Add(new KeyValuePair<int, string>(2, "Mike"));
+        //    list.Add(new KeyValuePair<int, string>(3, "Scottie"));
+        //    list.Add(new KeyValuePair<int, string>(4, "Horace"));
+        //    list.Add(new KeyValuePair<int, string>(5, "Bill"));
+
+        //    using (MySqlConnection myConnection = new MySqlConnection(connStr)) 
+        //    {
+        //        //string myUpdateQuery =
+        //        foreach (var kvp in list) 
+        //        {
+        //            cmdPart2 = cmdPart2 + "WHEN " + kvp.Key.ToString() + " THEN '" + kvp.Value + "' ";
+
+        //            cmdPart4 = cmdPart4 + kvp.Key.ToString() + ",";
+        //        }
+
+        //        //string founderMinus1 = founder.Remove(founder.Length - 1, 1);
+        //        cmdPart4 = cmdPart4.Remove(cmdPart4.Length - 1, 1);
+
+        //        string myUpdateQuery = cmdPart1 + cmdPart2 + cmdPart3 + cmdPart4 + cmdPart5;
+
+        //        MySqlCommand mySqlCommand = new MySqlCommand(myUpdateQuery);
+        //        mySqlCommand.Connection = myConnection;
+        //        myConnection.Open();
+
+        //        var test = mySqlCommand.ExecuteNonQuery();
+
+        //        if (test > 0)
+        //        {
+        //            testRes = true;
+        //        }
+        //        else 
+        //        {
+        //            testRes = false;
+        //        }
+
+        //    }
+
+
+
+        //}
 
         /*
           var list = new List<KeyValuePair<string, int>>();
